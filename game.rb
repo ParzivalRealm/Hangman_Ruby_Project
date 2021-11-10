@@ -9,7 +9,7 @@ class Game
   attr_accessor :word, :hidden_word, :remaining_lifes, :word_array, :wrong_responses_log, :game_ended_flag
 
   def initialize(dictionary, response)
-    if response == "y"
+    if response == "y" && File.exist?('./database.yaml')
       game_data = load_game(File.open('./database.yaml',"r").read)
       @word = game_data.word
       @hidden_word = game_data.hidden_word
