@@ -25,12 +25,14 @@ class Game
         @word_array = word_array = word.split("")
         @wrong_responses_log = Array.new
         @game_ended_flag = false
+        self.hide_word(self.word_array)
         puts @word
     end
   end
 
   #This grabs the word and replaces the letter with underscores
   def hide_word(word_array)
+
     word_array.map do |letter|
       letter = " _ "
       @hidden_word.push(letter)

@@ -7,7 +7,6 @@ extend TextScripts
 puts "Do you want to resume a game?"
 response = gets.chomp
 game = Game.new(File.read('./5desk.txt'), response) 
-game.hide_word(game.word_array)
 game.first_text
 game.turn()
 
