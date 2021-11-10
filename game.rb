@@ -2,18 +2,31 @@ class Game
   require './texts.rb'
   require './word_selector.rb'
   require 'pry'
+  require './state_manager.rb'
   include TextScripts
   extend WordSelector
-  attr_accessor :word, :hidden_word, :remaining_lifes, :word_array
+  include StateManager
+  attr_accessor :word, :hidden_word, :remaining_lifes, :word_array, :wrong_responses_log, :game_ended_flag
 
-  def initialize(dictionary)
-    @word = Game.get_word(dictionary)
-    @hidden_word = Array.new
-    @remaining_lifes = 5
-    @word_array = word_array = word.split("")
-    @wrong_responses_log = Array.new
-    @game_ended_flag = false
-    puts @word
+  def initialize(dictionary, response)
+    if response == "y"
+      game_data = load_game(File.open('./database.yaml',"r").read)
+      @word = game_data.word
+      @hidden_word = game_data.hidden_word
+      @remaining_lifes = game_data.remaining_lifes
+      @word_array = word_array = game_data.word_array
+      @wrong_responses_log = game_data.wrong_responses_log
+      @game_ended_flag = game_data.game_ended_flag
+      puts @word
+      else
+        @word = Game.get_word(dictionary)
+        @hidden_word = Array.new
+        @remaining_lifes = 5
+        @word_array = word_array = word.split("")
+        @wrong_responses_log = Array.new
+        @game_ended_flag = false
+        puts @word
+    end
   end
 
   #This grabs the word and replaces the letter with underscores
@@ -52,10 +65,12 @@ class Game
     begin
       if  player_response.length == 1 && player_response.to_i.to_s != player_response
         update_hidden_word(player_response)
+        self.save_game
         is_game_ended?
       else
         self.invalid_response_text
         player_response = gets
+        self.save_game
         is_game_ended?
       end
     end
@@ -73,6 +88,14 @@ class Game
     else
       turn()
     end
+  end
+
+  def save_game_question()
+    puts "do you wish to save the game?"
+    player_response = gets.chomp
+    
+
     
   end
+  
 end
