@@ -1,5 +1,5 @@
 module StateManager
-  require 'YAML'
+  require 'yaml'
   def save_game()
     puts "do you wish to save the game?"
     player_response = gets.chomp
